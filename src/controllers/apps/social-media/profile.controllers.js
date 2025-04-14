@@ -159,6 +159,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
   if (!req.file?.filename) {
     throw new ApiError(400, "Cover image is required");
   }
+  
   // get cover image file's system url and local path
   const coverImageUrl = getStaticFilePath(req, req.file?.filename);
   const coverImageLocalPath = getLocalPath(req.file?.filename);

@@ -133,22 +133,24 @@ const postCommonAggregation = (req) => {
     },
   ];
 };
-
 const createPost = asyncHandler(async (req, res) => {
   const { content, tags } = req.body;
+  
+   
   // Check if user has uploaded any images if yes then extract the file path
   // else assign an empty array
   /**
    * @type {{ url: string; localPath: string; }[]}
    */
-  const images =
-    req.files.images && req.files.images?.length
-      ? req.files.images.map((image) => {
-          const imageUrl = getStaticFilePath(req, image.filename);
-          const imageLocalPath = getLocalPath(image.filename);
-          return { url: imageUrl, localPath: imageLocalPath };
-        })
-      : [];
+  
+  console.log(req.file);
+  
+let images = [];
+  if (req.file) {
+    const imageUrl = getStaticFilePath(req, req.file.filename);
+    const imageLocalPath = getLocalPath(req.file.filename);
+    images.push({ url: imageUrl, localPath: imageLocalPath });
+  }
 
   const author = req.user._id;
 
@@ -176,7 +178,6 @@ const createPost = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, createdPost[0], "Post created successfully"));
 });
-
 const updatePost = asyncHandler(async (req, res) => {
   const { content, tags } = req.body;
   const { postId } = req.params;

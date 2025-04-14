@@ -32,9 +32,7 @@ router
   .get(getLoggedInUserOrIgnore, getAllPosts)
   .post(
     verifyJWT,
-    upload.fields([
-      { name: "images", maxCount: MAXIMUM_SOCIAL_POST_IMAGE_COUNT },
-    ]),
+    upload.single("image"),
     createPostValidator(),
     validate,
     createPost
